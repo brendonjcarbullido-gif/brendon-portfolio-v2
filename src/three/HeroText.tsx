@@ -15,11 +15,8 @@ export function HeroText() {
         anchorY="middle"
         letterSpacing={-0.02}
         lineHeight={1}
-        // @ts-ignore drei Text forwards material props
         material-toneMapped={false}
-        // @ts-ignore
         material-roughness={0.25}
-        // @ts-ignore
         material-metalness={0.1}
       >
         BRENDON
@@ -33,11 +30,8 @@ export function HeroText() {
         anchorY="middle"
         letterSpacing={-0.02}
         lineHeight={1}
-        // @ts-ignore
         material-toneMapped={false}
-        // @ts-ignore
         material-roughness={0.25}
-        // @ts-ignore
         material-metalness={0.1}
       >
         CARBULLIDO
