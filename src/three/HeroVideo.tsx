@@ -10,6 +10,7 @@ export function HeroVideo() {
 
   useEffect(() => {
     const video = document.createElement('video')
+    video.src = '/videos/C0006.mov'
     video.autoplay = true
     video.muted = true
     video.loop = true
@@ -19,16 +20,6 @@ export function HeroVideo() {
     video.setAttribute('autoplay', '')
     video.setAttribute('webkit-playsinline', '')
     video.crossOrigin = 'anonymous'
-
-    const mp4 = document.createElement('source')
-    mp4.src = '/videos/C0006.mp4'
-    mp4.type = 'video/mp4'
-    video.appendChild(mp4)
-
-    const mov = document.createElement('source')
-    mov.src = '/videos/C0006.mov'
-    mov.type = 'video/quicktime'
-    video.appendChild(mov)
 
     video.style.cssText =
       'position:fixed;top:-9999px;opacity:0;pointer-events:none;width:1px;height:1px;'
