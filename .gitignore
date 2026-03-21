@@ -1,6 +1,7 @@
 node_modules/
 dist/
-public/videos/
+public/videos/*.mov
+public/images/videography/
 public/images/videography/
 public/images/photography/
 public/images/video/
