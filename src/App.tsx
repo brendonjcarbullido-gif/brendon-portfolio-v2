@@ -1,21 +1,22 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Nav } from '@/components/Nav'
+import Home from '@/pages/Home'
 
-function Home() {
+function CaseStudy() {
   return (
     <div
       style={{
         minHeight: '100vh',
+        background: '#1A1612',
+        color: '#F5F0E8',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#1A1612',
-        color: '#F5F0E8',
         fontFamily: 'Cormorant Garamond, serif',
-        fontSize: '3rem',
-        letterSpacing: '0.1em',
+        fontSize: '1.5rem',
       }}
     >
-      BC — V2 Loading
+      Case Study — Phase 5
     </div>
   )
 }
@@ -23,9 +24,10 @@ function Home() {
 export default function App() {
   return (
     <BrowserRouter>
+      <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/work/:slug" element={<div>Case Study</div>} />
+        <Route path="/work/:slug" element={<CaseStudy />} />
       </Routes>
     </BrowserRouter>
   )
