@@ -1,72 +1,82 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { setGyroActive } from '@/three/gyroState'
 
 const DeviceOrientationEventMaybe = DeviceOrientationEvent as unknown as {
   requestPermission?: () => Promise<'granted' | 'denied'>
 }
 
 export function GyroPermission() {
-  const [show, setShow] = useState(false)
-  const [granted, setGranted] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [active, setActive] = useState(false)
+  const [permissionGranted, setPermissionGranted] = useState(false)
 
   useEffect(() => {
     const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
     if (!isMobile) return
+    setVisible(true)
 
-    if (typeof DeviceOrientationEventMaybe.requestPermission === 'function') {
-      setShow(true)
-    } else {
-      setGranted(true)
+    if (typeof DeviceOrientationEventMaybe.requestPermission !== 'function') {
+      setPermissionGranted(true)
     }
   }, [])
 
-  const requestPermission = async () => {
-    const req = DeviceOrientationEventMaybe.requestPermission
-    if (typeof req !== 'function') return
-    try {
-      const result = await req()
-      if (result === 'granted') {
-        setGranted(true)
-        setShow(false)
-        window.dispatchEvent(new Event('gyro-granted'))
-      }
-    } catch {
-      setShow(false)
+  const handleToggle = async () => {
+    if (active) {
+      setActive(false)
+      setGyroActive(false)
+      window.dispatchEvent(new Event('gyro-stop'))
+      return
     }
+
+    if (!permissionGranted) {
+      const req = DeviceOrientationEventMaybe.requestPermission
+      if (typeof req === 'function') {
+        try {
+          const result = await req()
+          if (result !== 'granted') return
+        } catch {
+          return
+        }
+      }
+      setPermissionGranted(true)
+    }
+
+    setActive(true)
+    setGyroActive(true)
+    window.dispatchEvent(new Event('gyro-start'))
   }
 
+  if (!visible) return null
+
   return (
-    <AnimatePresence>
-      {show && !granted && (
-        <motion.button
-          type="button"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ delay: 1.5, duration: 0.5 }}
-          onClick={requestPermission}
-          style={{
-            position: 'fixed',
-            bottom: '100px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 200,
-            background: 'rgba(245,240,232,0.08)',
-            border: '1px solid rgba(245,240,232,0.25)',
-            color: 'rgba(245,240,232,0.7)',
-            fontFamily: 'DM Sans, sans-serif',
-            fontSize: '0.65rem',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            padding: '12px 24px',
-            cursor: 'pointer',
-            backdropFilter: 'blur(8px)',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          Enable 3D Experience
-        </motion.button>
-      )}
-    </AnimatePresence>
+    <motion.button
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1.2, duration: 0.5 }}
+      onClick={handleToggle}
+      type="button"
+      style={{
+        position: 'fixed',
+        bottom: '96px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 200,
+        background: active ? 'rgba(196,168,130,0.15)' : 'rgba(245,240,232,0.06)',
+        border: active ? '1px solid rgba(196,168,130,0.5)' : '1px solid rgba(245,240,232,0.2)',
+        color: active ? '#C4A882' : 'rgba(245,240,232,0.6)',
+        fontFamily: 'DM Sans, sans-serif',
+        fontSize: '0.62rem',
+        letterSpacing: '0.2em',
+        textTransform: 'uppercase',
+        padding: '12px 24px',
+        cursor: 'pointer',
+        backdropFilter: 'blur(8px)',
+        whiteSpace: 'nowrap',
+        transition: 'all 0.3s ease',
+      }}
+    >
+      {active ? 'Stop 3D Experience' : 'Enable 3D Experience'}
+    </motion.button>
   )
 }

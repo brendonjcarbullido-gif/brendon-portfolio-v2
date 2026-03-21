@@ -3,57 +3,44 @@ import { useRef } from 'react'
 import * as THREE from 'three'
 
 const input = { x: 0, y: 0 }
+let gyroRunning = false
 
 if (typeof window !== 'undefined') {
-  window.addEventListener(
-    'mousemove',
-    (e) => {
-      input.x = (e.clientX / window.innerWidth) * 2 - 1
-      input.y = -((e.clientY / window.innerHeight) * 2 - 1)
-    },
-    { passive: true },
-  )
-}
-
-function initGyroscope() {
   const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
-  if (!isMobile) return
-
-  let attached = false
-
-  const onOrientation = (e: DeviceOrientationEvent) => {
-    const x = Math.max(-1, Math.min(1, -(e.gamma ?? 0) / 30))
-    const y = Math.max(-1, Math.min(1, ((e.beta ?? 0) - 15) / 30))
-    input.x = x
-    input.y = y
-  }
-
-  const startGyro = () => {
-    if (attached) return
-    attached = true
-    window.addEventListener('deviceorientation', onOrientation, { passive: true })
-  }
-
-  const DeviceOrientationEventMaybe = DeviceOrientationEvent as unknown as {
-    requestPermission?: () => Promise<'granted' | 'denied'>
-  }
-
-  const requestPermission = DeviceOrientationEventMaybe.requestPermission
-  if (typeof requestPermission === 'function') {
+  if (!isMobile) {
     window.addEventListener(
-      'gyro-granted',
-      () => {
-        startGyro()
+      'mousemove',
+      (e) => {
+        input.x = (e.clientX / window.innerWidth) * 2 - 1
+        input.y = -((e.clientY / window.innerHeight) * 2 - 1)
       },
-      { once: true },
+      { passive: true },
     )
-  } else {
-    startGyro()
   }
 }
 
+function startGyro() {
+  if (gyroRunning) return
+  gyroRunning = true
+  window.addEventListener('deviceorientation', handleOrientation, { passive: true })
+}
+
+function stopGyro() {
+  gyroRunning = false
+  window.removeEventListener('deviceorientation', handleOrientation)
+  input.x = 0
+  input.y = 0
+}
+
+function handleOrientation(e: DeviceOrientationEvent) {
+  if (!gyroRunning) return
+  input.x = Math.max(-1, Math.min(1, -(e.gamma ?? 0) / 30))
+  input.y = Math.max(-1, Math.min(1, ((e.beta ?? 0) - 15) / 30))
+}
+
 if (typeof window !== 'undefined') {
-  initGyroscope()
+  window.addEventListener('gyro-start', startGyro)
+  window.addEventListener('gyro-stop', stopGyro)
 }
 
 const BASE_Z = 5
