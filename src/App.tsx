@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Nav } from '@/components/Nav'
+import { GyroPermission } from '@/components/GyroPermission'
 import Home from '@/pages/Home'
 
 function CaseStudy() {
@@ -25,6 +26,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Nav />
+      <GyroPermission />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/work/:slug" element={<CaseStudy />} />

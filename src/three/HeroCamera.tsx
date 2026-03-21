@@ -40,16 +40,13 @@ function initGyroscope() {
 
   const requestPermission = DeviceOrientationEventMaybe.requestPermission
   if (typeof requestPermission === 'function') {
-    const onTouch = async () => {
-      try {
-        const result = await requestPermission()
-        if (result === 'granted') startGyro()
-      } catch {
-        /* permission denied */
-      }
-      document.removeEventListener('touchstart', onTouch)
-    }
-    document.addEventListener('touchstart', onTouch, { once: true, passive: true })
+    window.addEventListener(
+      'gyro-granted',
+      () => {
+        startGyro()
+      },
+      { once: true },
+    )
   } else {
     startGyro()
   }
