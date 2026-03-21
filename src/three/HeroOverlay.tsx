@@ -16,7 +16,7 @@ function RoleRotator() {
     <div
       style={{
         position: 'relative',
-        height: '2rem',
+        height: '3rem',
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
@@ -34,7 +34,7 @@ function RoleRotator() {
           style={{
             position: 'absolute',
             color: '#C4A882',
-            fontSize: '1.05rem',
+            fontSize: '2.2rem',
             fontFamily: 'Cormorant Garamond, serif',
             fontStyle: 'italic',
             fontWeight: 400,
@@ -53,7 +53,7 @@ export function HeroOverlay() {
   return (
     <group>
       <Html
-        position={[0, -1.5, 0.8]}
+        position={[0, -0.58, 3.0]}
         center
         occlude={false}
         style={{ pointerEvents: 'none', userSelect: 'none' }}
@@ -62,7 +62,7 @@ export function HeroOverlay() {
         <RoleRotator />
       </Html>
       <Html
-        position={[0, -2.2, 0.3]}
+        position={[0, -0.88, 2.5]}
         center
         occlude={false}
         style={{ pointerEvents: 'none', userSelect: 'none' }}
@@ -71,10 +71,10 @@ export function HeroOverlay() {
         <p
           style={{
             color: 'rgba(245,240,232,0.45)',
-            fontSize: '0.7rem',
+            fontSize: '1.1rem',
             fontFamily: 'DM Sans, sans-serif',
             fontWeight: 300,
-            letterSpacing: '0.22em',
+            letterSpacing: '0.18em',
             textTransform: 'uppercase',
             whiteSpace: 'nowrap',
             textAlign: 'center',

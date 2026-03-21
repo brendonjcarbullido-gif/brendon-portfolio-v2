@@ -17,8 +17,8 @@ if (typeof window !== 'undefined') {
 }
 
 const BASE_Z = 5
-const RANGE_X = 0.9
-const RANGE_Y = 0.55
+const RANGE_X = 0.7
+const RANGE_Y = 0.4
 const LERP_SPEED = 0.04
 
 export function HeroCamera() {

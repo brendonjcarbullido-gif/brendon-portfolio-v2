@@ -37,7 +37,14 @@ export function HeroScene() {
         gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
         style={{ position: 'absolute', inset: 0 }}
       >
-        <Suspense fallback={null}>
+        <Suspense
+          fallback={
+            <mesh>
+              <boxGeometry args={[0.5, 0.5, 0.5]} />
+              <meshBasicMaterial color="#F5F0E8" />
+            </mesh>
+          }
+        >
           <SceneContents />
         </Suspense>
       </Canvas>

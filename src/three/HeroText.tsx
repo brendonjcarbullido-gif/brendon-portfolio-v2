@@ -1,38 +1,29 @@
 import { Text } from '@react-three/drei'
 
-const FONT =
-  'https://fonts.gstatic.com/s/cormorantgaramond/v22/co3YmX5slCNuHLi8bLeY9MK7whWMhyjYqXtK.woff'
-
 export function HeroText() {
   return (
     <group>
       <Text
-        position={[0, 0.75, 2.0]}
-        fontSize={1.35}
-        font={FONT}
+        position={[0, 0.32, 2.0]}
+        fontSize={0.72}
         color="#F5F0E8"
         anchorX="center"
         anchorY="middle"
         letterSpacing={-0.02}
         lineHeight={1}
         material-toneMapped={false}
-        material-roughness={0.25}
-        material-metalness={0.1}
       >
         BRENDON
       </Text>
       <Text
-        position={[0, -0.5, 1.5]}
-        fontSize={1.1}
-        font={FONT}
+        position={[0, -0.32, 1.8]}
+        fontSize={0.58}
         color="#F5F0E8"
         anchorX="center"
         anchorY="middle"
-        letterSpacing={-0.02}
+        letterSpacing={-0.01}
         lineHeight={1}
         material-toneMapped={false}
-        material-roughness={0.25}
-        material-metalness={0.1}
       >
         CARBULLIDO
       </Text>
