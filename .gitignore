@@ -1,0 +1,10 @@
+node_modules/
+dist/
+public/videos/
+public/images/videography/
+public/images/photography/
+public/images/video/
+public/images/design/
+public/images/about/
+*.mov
+*.mp4
