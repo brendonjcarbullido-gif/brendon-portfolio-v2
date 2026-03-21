@@ -10,21 +10,44 @@ export function HeroVideo() {
 
   useEffect(() => {
     const video = document.createElement('video')
-    video.src = '/videos/C0006.mov'
     video.autoplay = true
     video.muted = true
     video.loop = true
     video.playsInline = true
-    video.style.cssText = 'position:fixed;top:-9999px;opacity:0;pointer-events:none;'
+    video.setAttribute('playsinline', '')
+    video.setAttribute('muted', '')
+    video.setAttribute('autoplay', '')
+    video.setAttribute('webkit-playsinline', '')
+    video.crossOrigin = 'anonymous'
+
+    const mp4 = document.createElement('source')
+    mp4.src = '/videos/C0006.mp4'
+    mp4.type = 'video/mp4'
+    video.appendChild(mp4)
+
+    const mov = document.createElement('source')
+    mov.src = '/videos/C0006.mov'
+    mov.type = 'video/quicktime'
+    video.appendChild(mov)
+
+    video.style.cssText =
+      'position:fixed;top:-9999px;opacity:0;pointer-events:none;width:1px;height:1px;'
     document.body.appendChild(video)
 
-    video.play().catch(() => {
-      const tryPlay = () => {
-        void video.play()
-        window.removeEventListener('click', tryPlay)
-      }
-      window.addEventListener('click', tryPlay)
-    })
+    video.load()
+
+    const playPromise = video.play()
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        const tryPlay = () => {
+          void video.play()
+          document.removeEventListener('touchstart', tryPlay)
+          window.removeEventListener('click', tryPlay)
+        }
+        document.addEventListener('touchstart', tryPlay, { once: true, passive: true })
+        window.addEventListener('click', tryPlay, { once: true })
+      })
+    }
 
     const texture = new THREE.VideoTexture(video)
     texture.minFilter = THREE.LinearFilter

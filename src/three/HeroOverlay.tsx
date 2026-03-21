@@ -1,10 +1,17 @@
 import { Html } from '@react-three/drei'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useThree } from '@react-three/fiber'
 
 const ROLES = ['Art Director', 'Creative Director', 'Brand Strategist', 'Content Director']
 
-function RoleRotator() {
+function RoleRotator({
+  fontSize = '2.2rem',
+  height = '3rem',
+}: {
+  fontSize?: string
+  height?: string
+}) {
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
@@ -16,7 +23,7 @@ function RoleRotator() {
     <div
       style={{
         position: 'relative',
-        height: '3rem',
+        height,
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
@@ -34,7 +41,7 @@ function RoleRotator() {
           style={{
             position: 'absolute',
             color: '#C4A882',
-            fontSize: '2.2rem',
+            fontSize,
             fontFamily: 'Cormorant Garamond, serif',
             fontStyle: 'italic',
             fontWeight: 400,
@@ -50,19 +57,28 @@ function RoleRotator() {
 }
 
 export function HeroOverlay() {
+  const { viewport } = useThree()
+  const scale = Math.min(1, viewport.width / 11)
+
+  const rotatorY = -0.58 * scale
+  const taglineY = -0.88 * scale
+  const rotatorFontSize = `${2.2 * scale}rem`
+  const taglineFontSize = `${1.1 * scale}rem`
+  const rotatorHeight = `${3 * scale}rem`
+
   return (
     <group>
       <Html
-        position={[0, -0.58, 3.0]}
+        position={[0, rotatorY, 3.0]}
         center
         occlude={false}
         style={{ pointerEvents: 'none', userSelect: 'none' }}
         zIndexRange={[1, 10]}
       >
-        <RoleRotator />
+        <RoleRotator fontSize={rotatorFontSize} height={rotatorHeight} />
       </Html>
       <Html
-        position={[0, -0.88, 2.5]}
+        position={[0, taglineY, 2.5]}
         center
         occlude={false}
         style={{ pointerEvents: 'none', userSelect: 'none' }}
@@ -71,7 +87,7 @@ export function HeroOverlay() {
         <p
           style={{
             color: 'rgba(245,240,232,0.45)',
-            fontSize: '1.1rem',
+            fontSize: taglineFontSize,
             fontFamily: 'DM Sans, sans-serif',
             fontWeight: 300,
             letterSpacing: '0.18em',

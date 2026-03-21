@@ -1,5 +1,74 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(
+    () => (typeof window !== 'undefined' ? window.innerWidth >= 768 : true),
+  )
+  useEffect(() => {
+    const handler = () => setIsDesktop(window.innerWidth >= 768)
+    handler()
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+  return isDesktop
+}
+
+function DesktopLinks() {
+  const isDesktop = useIsDesktop()
+  if (!isDesktop) return null
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
+      {['Work', 'About', 'Contact'].map((link) => (
+        <a
+          key={link}
+          href={`#${link.toLowerCase()}`}
+          style={{
+            fontSize: '0.7rem',
+            fontWeight: 400,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'rgba(245,240,232,0.55)',
+            fontFamily: 'DM Sans, sans-serif',
+            textDecoration: 'none',
+            transition: 'color 0.25s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F0E8')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(245,240,232,0.55)')}
+        >
+          {link}
+        </a>
+      ))}
+      <a
+        href="/files/brendon-carbullido-resume.pdf"
+        download
+        style={{
+          fontSize: '0.65rem',
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          color: 'rgba(245,240,232,0.5)',
+          border: '1px solid rgba(245,240,232,0.2)',
+          padding: '8px 16px',
+          fontFamily: 'DM Sans, sans-serif',
+          textDecoration: 'none',
+          transition: 'all 0.25s',
+        }}
+        onMouseEnter={(e) => {
+          const el = e.currentTarget
+          el.style.color = '#F5F0E8'
+          el.style.borderColor = 'rgba(245,240,232,0.5)'
+        }}
+        onMouseLeave={(e) => {
+          const el = e.currentTarget
+          el.style.color = 'rgba(245,240,232,0.5)'
+          el.style.borderColor = 'rgba(245,240,232,0.2)'
+        }}
+      >
+        Résumé ↓
+      </a>
+    </div>
+  )
+}
 
 export function Nav() {
   const [open, setOpen] = useState(false)
@@ -16,7 +85,7 @@ export function Nav() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '28px 56px',
+          padding: '24px 28px',
         }}
       >
         <a
@@ -34,56 +103,7 @@ export function Nav() {
           BC
         </a>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
-          {['Work', 'About', 'Contact'].map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
-              style={{
-                fontSize: '0.7rem',
-                fontWeight: 400,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: 'rgba(245,240,232,0.55)',
-                fontFamily: 'DM Sans, sans-serif',
-                textDecoration: 'none',
-                transition: 'color 0.25s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F0E8')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(245,240,232,0.55)')}
-            >
-              {link}
-            </a>
-          ))}
-
-          <a
-            href="/files/brendon-carbullido-resume.pdf"
-            download
-            style={{
-              fontSize: '0.65rem',
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'rgba(245,240,232,0.5)',
-              border: '1px solid rgba(245,240,232,0.2)',
-              padding: '8px 16px',
-              fontFamily: 'DM Sans, sans-serif',
-              textDecoration: 'none',
-              transition: 'all 0.25s',
-            }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget
-              el.style.color = '#F5F0E8'
-              el.style.borderColor = 'rgba(245,240,232,0.5)'
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget
-              el.style.color = 'rgba(245,240,232,0.5)'
-              el.style.borderColor = 'rgba(245,240,232,0.2)'
-            }}
-          >
-            Résumé ↓
-          </a>
-        </div>
+        <DesktopLinks />
 
         <button
           type="button"

@@ -1,11 +1,22 @@
 import { Text } from '@react-three/drei'
+import { useThree } from '@react-three/fiber'
 
 export function HeroText() {
+  const { viewport } = useThree()
+
+  const scale = Math.min(1, viewport.width / 11)
+
+  const brendonSize = 0.72 * scale
+  const carbullidoSize = 0.58 * scale
+
+  const brendonY = 0.32 * scale
+  const carbullidoY = -0.32 * scale
+
   return (
     <group>
       <Text
-        position={[0, 0.32, 2.0]}
-        fontSize={0.72}
+        position={[0, brendonY, 2.0]}
+        fontSize={brendonSize}
         color="#F5F0E8"
         anchorX="center"
         anchorY="middle"
@@ -16,8 +27,8 @@ export function HeroText() {
         BRENDON
       </Text>
       <Text
-        position={[0, -0.32, 1.8]}
-        fontSize={0.58}
+        position={[0, carbullidoY, 1.8]}
+        fontSize={carbullidoSize}
         color="#F5F0E8"
         anchorX="center"
         anchorY="middle"
