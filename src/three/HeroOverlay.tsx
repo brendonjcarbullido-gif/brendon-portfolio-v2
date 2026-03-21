@@ -8,9 +8,11 @@ const ROLES = ['Art Director', 'Creative Director', 'Brand Strategist', 'Content
 function RoleRotator({
   fontSize = '2.2rem',
   height = '3rem',
+  minWidth = '280px',
 }: {
   fontSize?: string
   height?: string
+  minWidth?: string
 }) {
   const [index, setIndex] = useState(0)
 
@@ -28,7 +30,7 @@ function RoleRotator({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minWidth: '280px',
+        minWidth,
       }}
     >
       <AnimatePresence mode="wait">
@@ -60,8 +62,9 @@ export function HeroOverlay() {
   const { viewport } = useThree()
   const scale = Math.min(1, viewport.width / 11)
 
-  const rotatorY = -0.58 * scale
-  const taglineY = -0.88 * scale
+  const rotatorY = Math.max(-0.8, -0.58 * scale)
+  const taglineY = Math.max(-1.1, -0.88 * scale)
+  const rotatorMinWidth = Math.min(280, viewport.width * 20)
   const rotatorFontSize = `${2.2 * scale}rem`
   const taglineFontSize = `${1.1 * scale}rem`
   const rotatorHeight = `${3 * scale}rem`
@@ -75,7 +78,11 @@ export function HeroOverlay() {
         style={{ pointerEvents: 'none', userSelect: 'none' }}
         zIndexRange={[1, 10]}
       >
-        <RoleRotator fontSize={rotatorFontSize} height={rotatorHeight} />
+        <RoleRotator
+          fontSize={rotatorFontSize}
+          height={rotatorHeight}
+          minWidth={`${rotatorMinWidth}px`}
+        />
       </Html>
       <Html
         position={[0, taglineY, 2.5]}
