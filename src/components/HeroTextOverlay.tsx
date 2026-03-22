@@ -84,7 +84,7 @@ export function HeroTextOverlay() {
     <div
       style={{
         position: 'absolute',
-        bottom: 'clamp(80px, 15%, 160px)',
+        bottom: 'clamp(110px, 22%, 200px)',
         left: 0,
         right: 0,
         display: 'flex',
