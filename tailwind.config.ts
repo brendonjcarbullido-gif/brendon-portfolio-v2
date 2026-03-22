@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         serif: ['Cormorant Garamond', 'Georgia', 'serif'],
         sans: ['DM Sans', 'system-ui', 'sans-serif'],
+        bebas: ['"Bebas Neue"', 'sans-serif'],
       },
     },
   },

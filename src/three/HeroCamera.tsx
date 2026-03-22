@@ -2,6 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
 import { heroLookInput } from './heroLookInput'
+import { faceInput } from './faceInput'
 
 let gyroRunning = false
 
@@ -53,7 +54,10 @@ export function HeroCamera() {
   const target = useRef(new THREE.Vector3(0, 0, BASE_Z))
 
   useFrame(() => {
-    target.current.set(heroLookInput.x * RANGE_X, heroLookInput.y * RANGE_Y, BASE_Z)
+    const srcX = faceInput.active ? faceInput.x : heroLookInput.x
+    const srcY = faceInput.active ? faceInput.y : heroLookInput.y
+    const z = BASE_Z + (faceInput.active ? faceInput.z : 0)
+    target.current.set(srcX * RANGE_X, srcY * RANGE_Y, z)
     camera.position.lerp(target.current, LERP_SPEED)
     camera.lookAt(0, 0, 0)
   })
