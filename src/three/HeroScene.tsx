@@ -3,8 +3,8 @@ import { Suspense } from 'react'
 import { HeroCamera } from './HeroCamera'
 import { HeroVideo } from './HeroVideo'
 import { HeroText } from './HeroText'
-import { HeroOverlay } from './HeroOverlay'
 import { PostFX } from './PostFX'
+import { HeroTextOverlay } from '@/components/HeroTextOverlay'
 import { HeroLighting } from './HeroLighting'
 
 function SceneContents() {
@@ -14,7 +14,6 @@ function SceneContents() {
       <HeroLighting />
       <HeroVideo />
       <HeroText />
-      <HeroOverlay />
       <PostFX />
     </>
   )
@@ -48,6 +47,8 @@ export function HeroScene() {
           <SceneContents />
         </Suspense>
       </Canvas>
+
+      <HeroTextOverlay />
 
       <div
         style={{

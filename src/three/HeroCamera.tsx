@@ -1,8 +1,8 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useRef } from 'react'
 import * as THREE from 'three'
+import { heroLookInput } from './heroLookInput'
 
-const input = { x: 0, y: 0 }
 let gyroRunning = false
 
 if (typeof window !== 'undefined') {
@@ -11,8 +11,8 @@ if (typeof window !== 'undefined') {
     window.addEventListener(
       'mousemove',
       (e) => {
-        input.x = (e.clientX / window.innerWidth) * 2 - 1
-        input.y = -((e.clientY / window.innerHeight) * 2 - 1)
+        heroLookInput.x = (e.clientX / window.innerWidth) * 2 - 1
+        heroLookInput.y = -((e.clientY / window.innerHeight) * 2 - 1)
       },
       { passive: true },
     )
@@ -28,14 +28,14 @@ function startGyro() {
 function stopGyro() {
   gyroRunning = false
   window.removeEventListener('deviceorientation', handleOrientation)
-  input.x = 0
-  input.y = 0
+  heroLookInput.x = 0
+  heroLookInput.y = 0
 }
 
 function handleOrientation(e: DeviceOrientationEvent) {
   if (!gyroRunning) return
-  input.x = Math.max(-1, Math.min(1, -(e.gamma ?? 0) / 30))
-  input.y = Math.max(-1, Math.min(1, ((e.beta ?? 0) - 15) / 30))
+  heroLookInput.x = Math.max(-1, Math.min(1, -(e.gamma ?? 0) / 30))
+  heroLookInput.y = Math.max(-1, Math.min(1, ((e.beta ?? 0) - 15) / 30))
 }
 
 if (typeof window !== 'undefined') {
@@ -44,16 +44,16 @@ if (typeof window !== 'undefined') {
 }
 
 const BASE_Z = 5
-const RANGE_X = 0.7
-const RANGE_Y = 0.4
-const LERP_SPEED = 0.04
+const RANGE_X = 0.45
+const RANGE_Y = 0.28
+const LERP_SPEED = 0.05
 
 export function HeroCamera() {
   const { camera } = useThree()
   const target = useRef(new THREE.Vector3(0, 0, BASE_Z))
 
   useFrame(() => {
-    target.current.set(input.x * RANGE_X, input.y * RANGE_Y, BASE_Z)
+    target.current.set(heroLookInput.x * RANGE_X, heroLookInput.y * RANGE_Y, BASE_Z)
     camera.position.lerp(target.current, LERP_SPEED)
     camera.lookAt(0, 0, 0)
   })
