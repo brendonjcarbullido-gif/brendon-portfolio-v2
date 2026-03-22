@@ -81,7 +81,11 @@ export function HeroTextOverlay() {
   }, [])
 
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-  const bottomPos = isMobile ? 'clamp(140px, 30%, 240px)' : '18%'
+  const isLandscape =
+    typeof window !== 'undefined' &&
+    window.innerWidth > window.innerHeight &&
+    window.innerWidth < 1024
+  const bottomPos = isLandscape ? '12%' : isMobile ? 'clamp(140px, 30%, 240px)' : '18%'
 
   return (
     <div
