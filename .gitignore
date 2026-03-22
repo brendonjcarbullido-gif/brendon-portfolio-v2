@@ -6,5 +6,7 @@ public/images/videography/
 public/images/photography/
 public/images/video/
 public/images/design/
-public/images/about/
+# Allow portfolio images
+!public/images/work/
+!public/images/about/
 *.mov
