@@ -80,11 +80,14 @@ export function HeroTextOverlay() {
     return () => cancelAnimationFrame(rafRef.current)
   }, [])
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+  const bottomPos = isMobile ? 'clamp(140px, 30%, 240px)' : '18%'
+
   return (
     <div
       style={{
         position: 'absolute',
-        bottom: 'clamp(110px, 22%, 200px)',
+        bottom: bottomPos,
         left: 0,
         right: 0,
         display: 'flex',
