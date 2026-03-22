@@ -58,9 +58,11 @@ export function GyroPermission() {
       type="button"
       style={{
         position: 'fixed',
-        bottom: '96px',
-        left: '50%',
-        transform: 'translateX(-50%)',
+        top: '80px',
+        right: '20px',
+        left: 'auto',
+        bottom: 'auto',
+        transform: 'none',
         zIndex: 200,
         background: active ? 'rgba(196,168,130,0.15)' : 'rgba(245,240,232,0.06)',
         border: active ? '1px solid rgba(196,168,130,0.5)' : '1px solid rgba(245,240,232,0.2)',

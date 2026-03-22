@@ -84,14 +84,14 @@ export function HeroTextOverlay() {
     <div
       style={{
         position: 'absolute',
-        bottom: '18%',
+        bottom: 'clamp(80px, 15%, 160px)',
         left: 0,
         right: 0,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '12px',
-        zIndex: 11,
+        gap: '8px',
+        zIndex: 10,
         pointerEvents: 'none',
         userSelect: 'none',
       }}
