@@ -6,12 +6,11 @@ import { WorkCard } from '@/components/WorkCard'
 const gridItems = [
   { project: projects[0], colStart: 1, colEnd: 8, height: 560 },
   { project: projects[1], colStart: 8, colEnd: 13, height: 560 },
-  { project: projects[2], colStart: 1, colEnd: 5, height: 400 },
+  { project: projects[5], colStart: 1, colEnd: 5, height: 400 },
   { project: projects[3], colStart: 5, colEnd: 9, height: 400 },
   { project: projects[4], colStart: 9, colEnd: 13, height: 400 },
-  { project: projects[5], colStart: 1, colEnd: 7, height: 480 },
+  { project: projects[2], colStart: 1, colEnd: 7, height: 480 },
   { project: projects[6], colStart: 7, colEnd: 13, height: 480 },
-  { project: projects[7], colStart: 1, colEnd: 13, height: 360 },
 ] as const
 
 const gridContainerStyle: CSSProperties = {
@@ -58,7 +57,7 @@ export function WorkGrid() {
             className="font-bebas leading-none text-[#c9a96e] shrink-0"
             style={{ fontSize: 'clamp(32px, 4vw, 48px)' }}
           >
-            <span className="sr-only">8 projects — </span>08
+            <span className="sr-only">7 projects — </span>07
           </p>
         </header>
 
