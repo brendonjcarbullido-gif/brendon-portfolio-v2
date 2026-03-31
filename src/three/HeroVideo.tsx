@@ -10,9 +10,7 @@ export function HeroVideo() {
 
   useEffect(() => {
     const video = document.createElement('video')
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-    const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
-    video.src = isMobile || isSafari ? '/videos/C0006.mp4' : '/videos/C0006.mov'
+    video.src = '/videos/C0006.mp4'
     video.autoplay = true
     video.muted = true
     video.loop = true

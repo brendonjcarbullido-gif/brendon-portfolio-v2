@@ -44,7 +44,7 @@ export function WorkCard({ project, colStart, colEnd, height }: WorkCardProps) {
         height: `${height}px`,
         position: 'relative',
         overflow: 'hidden',
-        cursor: 'crosshair',
+        cursor: 'pointer',
       }}
       initial="rest"
       whileHover="hover"
@@ -54,6 +54,7 @@ export function WorkCard({ project, colStart, colEnd, height }: WorkCardProps) {
         to={to}
         aria-label={`${project.client} — ${project.category}. View case study.`}
         className="absolute inset-0 block text-left no-underline outline-none focus-visible:ring-2 focus-visible:ring-[#c9a96e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a0a]"
+        style={{ cursor: 'pointer' }}
       >
         <motion.div
           className="absolute inset-0 overflow-hidden"

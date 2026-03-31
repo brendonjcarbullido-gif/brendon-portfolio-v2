@@ -32,6 +32,7 @@ function DesktopLinks() {
             fontFamily: 'DM Sans, sans-serif',
             textDecoration: 'none',
             transition: 'color 0.25s',
+            cursor: 'pointer',
           }}
           onMouseEnter={(e) => (e.currentTarget.style.color = '#F5F0E8')}
           onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(245,240,232,0.55)')}
@@ -52,6 +53,7 @@ function DesktopLinks() {
           fontFamily: 'DM Sans, sans-serif',
           textDecoration: 'none',
           transition: 'all 0.25s',
+          cursor: 'pointer',
         }}
         onMouseEnter={(e) => {
           const el = e.currentTarget
@@ -98,6 +100,7 @@ export function Nav() {
             textTransform: 'uppercase',
             color: '#F5F0E8',
             textDecoration: 'none',
+            cursor: 'pointer',
           }}
         >
           BC
@@ -173,6 +176,7 @@ export function Nav() {
                   lineHeight: 1.2,
                   marginBottom: '8px',
                   textDecoration: 'none',
+                  cursor: 'pointer',
                 }}
               >
                 {link}
@@ -191,6 +195,7 @@ export function Nav() {
                   color: 'rgba(245,240,232,0.4)',
                   fontFamily: 'DM Sans, sans-serif',
                   textDecoration: 'none',
+                  cursor: 'pointer',
                 }}
               >
                 Instagram ↗
@@ -206,6 +211,7 @@ export function Nav() {
                   color: 'rgba(245,240,232,0.4)',
                   fontFamily: 'DM Sans, sans-serif',
                   textDecoration: 'none',
+                  cursor: 'pointer',
                 }}
               >
                 LinkedIn ↗
@@ -223,6 +229,7 @@ export function Nav() {
                   textAlign: 'center',
                   fontFamily: 'DM Sans, sans-serif',
                   textDecoration: 'none',
+                  cursor: 'pointer',
                 }}
               >
                 Résumé ↓

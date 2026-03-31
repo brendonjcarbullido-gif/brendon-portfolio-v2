@@ -4,7 +4,7 @@ export interface Project {
   title: string
   client: string
   category: string
-  year: string
+  year: string | number
   mediaType: 'image' | 'video'
   image?: string
   video?: string
@@ -25,22 +25,30 @@ export const projects: Project[] = [
     title: "International Women's Campaign",
     client: 'Anne Klein',
     category: 'Campaign Direction',
-    year: '2023',
-    mediaType: 'image',
+    year: 2023,
+    mediaType: 'video',
+    video: '/videos/anne-klein-hero.mp4',
     image: '/images/work/anne-klein.jpg',
     caseStudy: {
       headline: 'Directing Power. Defining a Season.',
       overview:
-        "Full creative direction and production of Anne Klein's International Women's Campaign — concept through delivery across digital and print channels.",
-      role: 'Creative Director',
-      deliverables: ['Campaign Direction', 'Photography', 'Digital', 'Print'],
-      images: [
-        '/images/work/anne-klein.jpg',
-        '/images/work/anne-klein.jpg',
-        '/images/work/anne-klein.jpg',
-        '/images/work/anne-klein.jpg',
+        'A multi-season creative partnership with Anne Klein through GCMG Agency — spanning handbags, watches, accessories, and home goods. Full ownership from shot concept and set design through photography, videography, and final edit. Every frame conceived, directed, and delivered in-house.',
+      role: 'Associate Creative Director',
+      deliverables: [
+        'Shot Concept',
+        'Set Design',
+        'Photography',
+        'Videography',
+        'Editing',
+        'Campaign Direction',
       ],
-      color: '#8B6F47',
+      color: '#1a3a6b',
+      images: [
+        '/images/work/anne-klein-gallery-1.jpg',
+        '/videos/anne-klein-1.mp4',
+        '/videos/anne-klein-2.mp4',
+        '/images/work/anne-klein-gallery-2.jpg',
+      ],
     },
   },
   {

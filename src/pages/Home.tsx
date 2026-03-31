@@ -10,7 +10,9 @@ import { Footer } from '@/sections/Footer'
 export default function Home() {
   return (
     <main>
-      <HeroScene />
+      <section style={{ cursor: 'none' }}>
+        <HeroScene />
+      </section>
       <Marquee />
       <WorkGrid />
       <About />

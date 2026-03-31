@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
+import { type CSSProperties, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { projects } from '@/data/projects'
 
@@ -25,9 +25,6 @@ const labelStyle: CSSProperties = {
 export function CaseStudy() {
   const navigate = useNavigate()
   const { slug } = useParams<{ slug: string }>()
-  const cursorRef = useRef<HTMLDivElement | null>(null)
-  const [cursorExpanded, setCursorExpanded] = useState(false)
-  const [cursorEnabled, setCursorEnabled] = useState(false)
 
   const currentIndex = projects.findIndex((p) => p.slug === slug)
   const project = currentIndex >= 0 ? projects[currentIndex] : null
@@ -39,61 +36,8 @@ export function CaseStudy() {
     return `linear-gradient(to bottom, rgba(${r}, ${g}, ${b}, 0.08) 0%, #0a0a0a 100%)`
   }, [project])
 
-  useEffect(() => {
-    if (!project) return
-    if (typeof window === 'undefined') return
-    if (!window.matchMedia('(pointer: fine)').matches) return
-
-    setCursorEnabled(true)
-    let prevExpanded = false
-
-    const isHoverTarget = (node: Element | null): boolean => {
-      let current: Element | null = node
-      while (current) {
-        const tag = current.tagName.toLowerCase()
-        if (
-          tag === 'a' ||
-          tag === 'button' ||
-          current.classList.contains('case-study-gallery-image') ||
-          current.classList.contains('case-study-next-project')
-        ) {
-          return true
-        }
-        const cursor = window.getComputedStyle(current).cursor
-        if (cursor === 'pointer') return true
-        current = current.parentElement
-      }
-      return false
-    }
-
-    const onMouseMove = (e: MouseEvent) => {
-      const cursorEl = cursorRef.current
-      if (cursorEl) {
-        cursorEl.style.left = `${e.clientX}px`
-        cursorEl.style.top = `${e.clientY}px`
-      }
-
-      const hovered = isHoverTarget(e.target as Element | null)
-      if (hovered !== prevExpanded) {
-        prevExpanded = hovered
-        setCursorExpanded(hovered)
-      }
-    }
-
-    const onMouseLeaveWindow = () => {
-      setCursorExpanded(false)
-    }
-
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('mouseleave', onMouseLeaveWindow)
-
-    return () => {
-      window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('mouseleave', onMouseLeaveWindow)
-      setCursorEnabled(false)
-      setCursorExpanded(false)
-    }
-  }, [project])
+  const isVideo = (src: string) =>
+    src.endsWith('.mp4') || src.endsWith('.mov') || src.endsWith('.MOV')
 
   if (!project) {
     return (
@@ -132,10 +76,6 @@ export function CaseStudy() {
           min-height: 100vh;
           background: #0a0a0a;
           color: #f5f0e8;
-          cursor: none;
-        }
-        .case-study-shell * {
-          cursor: none !important;
         }
         .case-study-left {
           width: 45%;
@@ -150,10 +90,6 @@ export function CaseStudy() {
         @media (max-width: 767px) {
           .case-study-shell {
             display: block;
-            cursor: auto;
-          }
-          .case-study-shell * {
-            cursor: auto !important;
           }
           .case-study-left {
             width: 100%;
@@ -269,12 +205,6 @@ export function CaseStudy() {
               cursor: 'pointer',
               padding: '1.5rem 0',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = '#f5f0e8'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'rgba(255,255,255,0.4)'
-            }}
           >
             ← Work
           </button>
@@ -386,7 +316,12 @@ export function CaseStudy() {
             <p style={{ ...labelStyle, marginBottom: '1.5rem' }}>Gallery</p>
             <div
               className="case-study-gallery"
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.75rem' }}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gridTemplateRows: 'repeat(2, 1fr)',
+                gap: '0.75rem',
+              }}
             >
               {project.caseStudy.images.map((img, i) => (
                 <motion.div
@@ -395,15 +330,38 @@ export function CaseStudy() {
                   whileInView={{ scale: 1, opacity: 1 }}
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ aspectRatio: '1 / 1' }}
                 >
-                  <img
-                    src={img}
-                    alt={`${project.title} gallery ${i + 1}`}
-                    className="case-study-gallery-image"
-                    style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: '2px' }}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {isVideo(img) ? (
+                    <video
+                      src={img}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        borderRadius: '2px',
+                        display: 'block',
+                      }}
+                    />
+                  ) : (
+                    <img
+                      src={img}
+                      alt={`${project.title} gallery ${i + 1}`}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        borderRadius: '2px',
+                        display: 'block',
+                      }}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
                 </motion.div>
               ))}
             </div>
@@ -413,7 +371,6 @@ export function CaseStudy() {
             <button
               type="button"
               onClick={() => navigate(`/work/${nextProject.slug}`)}
-              className="case-study-next-project"
               style={{
                 width: '100%',
                 textAlign: 'left',
@@ -451,25 +408,6 @@ export function CaseStudy() {
           ) : null}
         </section>
       </main>
-      {cursorEnabled ? (
-        <div
-          ref={cursorRef}
-          style={{
-            position: 'fixed',
-            left: 0,
-            top: 0,
-            width: cursorExpanded ? '40px' : '12px',
-            height: cursorExpanded ? '40px' : '12px',
-            border: `1.5px solid ${cursorExpanded ? project.caseStudy.color : 'rgba(255,255,255,0.9)'}`,
-            borderRadius: '999px',
-            background: 'transparent',
-            pointerEvents: 'none',
-            zIndex: 9999,
-            transform: 'translate(-50%, -50%)',
-            transition: 'all 0.2s ease',
-          }}
-        />
-      ) : null}
     </>
   )
 }
