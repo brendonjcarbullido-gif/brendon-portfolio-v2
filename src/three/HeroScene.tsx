@@ -1,27 +1,66 @@
-import { Canvas } from '@react-three/fiber'
-import { Suspense } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Suspense, useEffect, useRef } from 'react'
+import * as THREE from 'three'
 import { HeroCamera } from './HeroCamera'
 import { HeroVideo } from './HeroVideo'
 import { HeroText } from './HeroText'
 import { PostFX } from './PostFX'
+import { HeroRoom } from './HeroRoom'
 import { HeroTextOverlay } from '@/components/HeroTextOverlay'
 import { HeroLighting } from './HeroLighting'
+import { setHeroParallaxVisibility } from './parallaxState'
+import { sceneScale } from './sceneScale'
+
+function RoomRoot() {
+  const roomRef = useRef<THREE.Group>(null)
+
+  useFrame(() => {
+    if (!roomRef.current) return
+    const current = roomRef.current.scale.x
+    const next = current + (sceneScale.value - current) * 0.02
+    roomRef.current.scale.setScalar(next)
+  })
+
+  return (
+    <group ref={roomRef}>
+      <HeroLighting />
+      <HeroRoom />
+      <HeroVideo />
+      <HeroText />
+      <PostFX />
+    </group>
+  )
+}
 
 function SceneContents() {
   return (
     <>
       <HeroCamera />
-      <HeroLighting />
-      <HeroVideo />
-      <HeroText />
-      <PostFX />
+      <RoomRoot />
     </>
   )
 }
 
 export function HeroScene() {
+  const heroRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!heroRef.current || typeof window === 'undefined') return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHeroParallaxVisibility(entry.isIntersecting)
+      },
+      { threshold: 0.1 },
+    )
+
+    observer.observe(heroRef.current)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div
+      ref={heroRef}
       style={{
         position: 'relative',
         width: '100vw',
@@ -36,6 +75,7 @@ export function HeroScene() {
         gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
         style={{ position: 'absolute', inset: 0 }}
       >
+        <fog attach="fog" args={['#080706', 8, 30]} />
         <Suspense
           fallback={
             <mesh>

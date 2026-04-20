@@ -1,10 +1,10 @@
 export function HeroLighting() {
   return (
     <>
-      <ambientLight intensity={0.35} color="#FFF8F0" />
-      <directionalLight position={[3, 4, 3]} intensity={1.2} color="#FFF4E8" />
-      <directionalLight position={[-4, 0, 2]} intensity={0.3} color="#E8F0FF" />
-      <pointLight position={[0, 0, -1]} intensity={0.8} color="#C4A882" distance={8} decay={2} />
+      <directionalLight position={[0, 8, 3]} intensity={1.2} color="#ffffff" />
+      <pointLight position={[0, -5, -8]} intensity={0.3} color="#c8a04a" distance={20} />
+      <ambientLight intensity={0.08} color="#0f0d0b" />
+      <pointLight position={[0, 0, -18]} intensity={0.15} color="#1a1510" distance={15} />
     </>
   )
 }

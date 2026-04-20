@@ -1,12 +1,44 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
+function VideoVignette() {
+  const material = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        uniforms: {},
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          varying vec2 vUv;
+          void main() {
+            vec2 center = vUv - 0.5;
+            float dist = length(center);
+            float vignette = smoothstep(0.3, 0.85, dist);
+            gl_FragColor = vec4(0.04, 0.04, 0.03, vignette * 0.75);
+          }
+        `,
+      }),
+    [],
+  )
+
+  return (
+    <mesh position={[0, 0, -21.8]} material={material}>
+      <planeGeometry args={[24, 12]} />
+    </mesh>
+  )
+}
+
 export function HeroVideo() {
-  const groupRef = useRef<THREE.Group>(null)
   const meshRef = useRef<THREE.Mesh>(null)
   const textureRef = useRef<THREE.VideoTexture | null>(null)
-  const currentPos = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     const video = document.createElement('video')
@@ -58,31 +90,21 @@ export function HeroVideo() {
     }
   }, [])
 
-  useFrame(({ mouse }) => {
+  useFrame(() => {
     if (textureRef.current) textureRef.current.needsUpdate = true
-
-    if (groupRef.current) {
-      const targetX = -mouse.x * 0.12
-      const targetY = -mouse.y * 0.08
-
-      currentPos.current.x += (targetX - currentPos.current.x) * 0.04
-      currentPos.current.y += (targetY - currentPos.current.y) * 0.04
-
-      groupRef.current.position.x = currentPos.current.x
-      groupRef.current.position.y = currentPos.current.y
-    }
   })
 
   return (
-    <group ref={groupRef} position={[0, 0, -4]}>
-      <mesh ref={meshRef}>
-        <planeGeometry args={[28, 18]} />
+    <>
+      <mesh ref={meshRef} position={[0, 0, -21.9]}>
+        <planeGeometry args={[24, 12]} />
         <meshBasicMaterial color="#ffffff" toneMapped={false} />
       </mesh>
-      <mesh position={[0, 0, 0.01]}>
-        <planeGeometry args={[28, 18]} />
-        <meshBasicMaterial color="#0D0B09" transparent opacity={0.58} depthWrite={false} />
+      <mesh position={[0, 0, -21.89]}>
+        <planeGeometry args={[24, 12]} />
+        <meshBasicMaterial color="#0D0B09" transparent opacity={0.35} depthWrite={false} />
       </mesh>
-    </group>
+      <VideoVignette />
+    </>
   )
 }

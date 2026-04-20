@@ -2,9 +2,11 @@ import { useEffect } from 'react'
 import { FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision'
 import type { FaceLandmarkerOptions } from '@mediapipe/tasks-vision'
 import { faceInput } from './faceInput'
+import { parallaxEnabled } from './parallaxState'
 
-const MODEL_URL =
+const REMOTE_MODEL_URL =
   'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
+const LOCAL_MODEL_URL = '/models/face_landmarker.task'
 
 /** Matches installed @mediapipe/tasks-vision for WASM resolution. */
 const VISION_WASM = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.33/wasm'
@@ -35,6 +37,7 @@ export function FaceTracker() {
     let video: HTMLVideoElement | null = null
     let stream: MediaStream | null = null
     let running = true
+    let modelReady = false
 
     let smoothX = 0
     let smoothY = 0
@@ -45,7 +48,12 @@ export function FaceTracker() {
       if (!running) return
       rafId = requestAnimationFrame(tick)
 
-      if (!landmarker || !video || video.readyState < 2) return
+      if (!parallaxEnabled.value) {
+        faceInput.active = false
+        return
+      }
+
+      if (!modelReady || !landmarker || !video || video.readyState < 2) return
 
       try {
         const results = landmarker.detectForVideo(video, performance.now())
@@ -116,19 +124,37 @@ export function FaceTracker() {
         await video.play()
 
         const vision = await FilesetResolver.forVisionTasks(VISION_WASM)
-        landmarker = await FaceLandmarker.createFromOptions(vision, {
-          baseOptions: {
-            modelAssetPath: MODEL_URL,
-            delegate: 'GPU',
-          },
-          runningMode: 'VIDEO',
-          numFaces: 1,
-          minFaceDetectionConfidence: 0.5,
-          minFacePresenceConfidence: 0.5,
-          minTrackingConfidence: 0.5,
-          outputFaceBlendshapes: false,
-          outputFacialTransformationMatrixes: false,
-        } as unknown as FaceLandmarkerOptions)
+        try {
+          landmarker = await FaceLandmarker.createFromOptions(vision, {
+            baseOptions: {
+              modelAssetPath: REMOTE_MODEL_URL,
+              delegate: 'GPU',
+            },
+            runningMode: 'VIDEO',
+            numFaces: 1,
+            minFaceDetectionConfidence: 0.5,
+            minFacePresenceConfidence: 0.5,
+            minTrackingConfidence: 0.5,
+            outputFaceBlendshapes: false,
+            outputFacialTransformationMatrixes: false,
+          } as unknown as FaceLandmarkerOptions)
+        } catch {
+          landmarker = await FaceLandmarker.createFromOptions(vision, {
+            baseOptions: {
+              modelAssetPath: LOCAL_MODEL_URL,
+              delegate: 'GPU',
+            },
+            runningMode: 'VIDEO',
+            numFaces: 1,
+            minFaceDetectionConfidence: 0.5,
+            minFacePresenceConfidence: 0.5,
+            minTrackingConfidence: 0.5,
+            outputFaceBlendshapes: false,
+            outputFacialTransformationMatrixes: false,
+          } as unknown as FaceLandmarkerOptions)
+        }
+        modelReady = true
+        console.log('[FaceTracker] model ready')
 
         rafId = requestAnimationFrame(tick)
       } catch {
